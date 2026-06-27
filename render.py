@@ -4,6 +4,7 @@ CSS lives in an external docs/style.css (write_css) so the whole site - every
 page, old and new - shares one beautiful theme; edit once, all pages update.
 """
 import html
+import json
 import config
 
 # Modern gradient theme.
@@ -69,13 +70,21 @@ def _ads_head():
             f'adsbygoogle.js?client={config.ADSENSE_CLIENT}" crossorigin="anonymous"></script>')
 
 
-def _head(title, description, css_path="style.css", home="index.html",
-          tools="tools/index.html"):
+def _head(title, description, canonical=None, css_path="style.css",
+          home="index.html", tools="tools/index.html"):
+    canonical = canonical or (config.SITE_URL + "/")
+    t, d = html.escape(title), html.escape(description)
     return (
         f'<!doctype html><html lang="en"><head><meta charset="utf-8">'
         f'<meta name="viewport" content="width=device-width,initial-scale=1">'
-        f'<title>{html.escape(title)}</title>'
-        f'<meta name="description" content="{html.escape(description)}">'
+        f'<title>{t}</title><meta name="description" content="{d}">'
+        f'<link rel="canonical" href="{canonical}">'
+        f'<link rel="icon" type="image/svg+xml" href="{config.SITE_URL}/favicon.svg">'
+        f'<meta property="og:title" content="{t}">'
+        f'<meta property="og:description" content="{d}">'
+        f'<meta property="og:type" content="website">'
+        f'<meta property="og:url" content="{canonical}">'
+        f'<meta name="twitter:card" content="summary">'
         f'<link rel="stylesheet" href="{css_path}">{_ads_head()}</head><body>'
         f'<header class="site"><div class="wrap">'
         f'<a href="{home}"><h1>{html.escape(config.SITE_TITLE)}</h1></a>'
@@ -85,8 +94,23 @@ def _head(title, description, css_path="style.css", home="index.html",
     )
 
 
-FOOT = (f'<footer>&copy; {html.escape(config.SITE_TITLE)}. '
-        f'For information purposes only.</footer></body></html>')
+def _footer():
+    u = config.SITE_URL
+    links = [f'<a href="{u}/about.html">About</a>',
+             f'<a href="{u}/contact.html">Contact</a>',
+             f'<a href="{u}/privacy.html">Privacy Policy</a>']
+    follow = []
+    if config.YOUTUBE_URL:
+        follow.append(f'<a href="{config.YOUTUBE_URL}">YouTube</a>')
+    if config.TELEGRAM_URL:
+        follow.append(f'<a href="{config.TELEGRAM_URL}">Telegram</a>')
+    foll = (" &middot; Follow: " + " ".join(follow)) if follow else ""
+    return (f'<footer><p>{" &middot; ".join(links)}{foll}</p>'
+            f'<p>&copy; {html.escape(config.SITE_TITLE)}. For information purposes only; '
+            f'not professional advice.</p></footer></body></html>')
+
+
+FOOT = _footer()
 
 
 def article_page(art: dict, date_str: str) -> str:
@@ -104,8 +128,17 @@ def article_page(art: dict, date_str: str) -> str:
     if art.get("conclusion"):
         body.append(f'<h2>Conclusion</h2><p>{html.escape(art["conclusion"])}</p>')
     body.append('<p style="margin-top:24px"><a href="index.html">&larr; More articles</a></p>')
-    return _head(art["title"], art.get("meta_description", art["title"])) + \
-        '<main class="wrap">' + "".join(body) + '</main>' + FOOT
+    canonical = f'{config.SITE_URL}/{art["slug"]}.html'
+    schema = {
+        "@context": "https://schema.org", "@type": "Article",
+        "headline": art["title"], "description": art.get("meta_description", ""),
+        "author": {"@type": "Person", "name": "Pradeep Pk"},
+        "publisher": {"@type": "Organization", "name": config.SITE_TITLE},
+        "mainEntityOfPage": canonical, "datePublished": date_str,
+    }
+    ld = f'<script type="application/ld+json">{json.dumps(schema)}</script>'
+    return _head(art["title"], art.get("meta_description", art["title"]), canonical) + \
+        '<main class="wrap">' + "".join(body) + '</main>' + ld + FOOT
 
 
 def index_page(articles: list[dict]) -> str:

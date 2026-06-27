@@ -12,6 +12,7 @@ import config
 import writer
 import render
 import keywords
+import site_extras
 
 for _s in (sys.stdout, sys.stderr):
     try:
@@ -66,6 +67,9 @@ def run():
     ordered = list(reversed(data["articles"]))
     (config.DOCS_DIR / "index.html").write_text(render.index_page(ordered), "utf-8")
     _save(data)
+
+    # supporting pages every real site needs (AdSense + SEO essentials)
+    site_extras.write_all(data["articles"])
 
     print(f"[blog] published: {art['title']}")
     print(f"[blog] total articles: {len(data['articles'])}")
