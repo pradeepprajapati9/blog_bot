@@ -18,9 +18,11 @@ ADSENSE_CLIENT = os.getenv("ADSENSE_CLIENT", "").strip()
 SITE_TITLE = os.getenv("SITE_TITLE", "Smart Daily Tips").strip()
 SITE_TAGLINE = os.getenv("SITE_TAGLINE", "Practical tips for everyday life").strip()
 
-# The blog's niche - keeps content consistent (better for SEO).
+# ONE multi-niche blog: money/finance, tech, health, govt schemes, everyday how-to.
 NICHE = os.getenv(
     "NICHE",
-    "practical how-to guides, tech & gadget tips, money-saving and online-earning "
-    "tips, and useful everyday-life explainers for Indian readers",
+    "practical, accurate how-to guides for Indian readers across money & finance "
+    "(loans, credit, savings, tax), tech & gadgets, health & fitness, government "
+    "schemes & jobs, and everyday-life tips. Educational only - never specific "
+    "investment, medical, or legal advice",
 )

@@ -6,14 +6,23 @@ This makes the blog demand-driven: we write articles that target actual searches
 import json
 import requests
 
-# Niche-relevant seeds; Google expands each into real long-tail searches.
+# ONE blog, ALL niches. Add a niche = just add a few seeds here (no new repo!).
 SEEDS = [
-    "how to save money", "how to earn money online", "how to reduce electricity bill",
-    "best phone under", "best laptop under", "best earphones under",
-    "how to improve", "how to apply for", "how to check", "how to download",
-    "how to make money", "what is", "how to start", "best apps for",
-    "how to get", "government scheme for", "how to invest", "how to increase",
-    "online earning app", "how to book", "how to link", "how to activate",
+    # money & finance (high AdSense RPM)
+    "how to save money", "how to get personal loan", "how to improve cibil score",
+    "best credit card for", "how to save tax", "best investment for beginners",
+    "how to earn money online", "best savings account",
+    # tech & gadgets
+    "best phone under", "best laptop under", "best earbuds under",
+    "best smartwatch under", "how to fix phone", "best phone for",
+    # health & fitness
+    "how to lose weight", "home remedies for", "benefits of", "how to increase",
+    "best exercise for", "foods to eat for",
+    # government schemes & jobs (huge India search volume)
+    "how to apply for", "government scheme for", "how to check", "how to download",
+    "sarkari yojana", "how to get job in",
+    # general how-to / everyday
+    "how to", "what is", "best apps for", "how to make", "how to start",
 ]
 UA = {"User-Agent": "Mozilla/5.0"}
 
