@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SIP Calculator - Mutual Fund Returns Estimator</title><meta name="description" content="Free SIP calculator: estimate the maturity value and returns of your monthly mutual fund SIP investment."><style>
+:root{--a:#1a73e8;--bg:#fff;--fg:#1f2328;--mut:#5b6470}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+color:var(--fg);background:#f6f8fb;line-height:1.7}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+header.site{background:var(--a);color:#fff;padding:22px 0}
+header.site a{color:#fff;text-decoration:none}
+header.site h1{margin:0;font-size:22px}header.site p{margin:4px 0 0;opacity:.9;font-size:14px}
+main{background:var(--bg);margin:18px auto;padding:26px;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+h1.title{font-size:30px;line-height:1.25;margin:.2em 0}
+.meta{color:var(--mut);font-size:13px;margin-bottom:18px}
+h2{font-size:22px;margin-top:1.6em}
+.card{background:#fff;border-radius:10px;padding:18px;margin:12px 0;box-shadow:0 1px 5px rgba(0,0,0,.05)}
+.card a{color:var(--a);text-decoration:none;font-weight:600;font-size:19px}
+.card p{color:var(--mut);margin:.4em 0 0}
+footer{color:var(--mut);text-align:center;padding:26px;font-size:13px}
+a{color:var(--a)}
+
+.tool label{display:block;margin:14px 0 4px;font-weight:600}
+.tool input,.tool select{width:100%;padding:11px;font-size:16px;border:1px solid #cfd6e0;
+border-radius:8px}
+.tool button{margin-top:18px;width:100%;padding:13px;font-size:17px;font-weight:700;
+background:#1a73e8;color:#fff;border:0;border-radius:8px;cursor:pointer}
+.result{margin-top:20px;padding:16px;background:#eef4ff;border-radius:10px;font-size:17px}
+.result b{font-size:22px;color:#1a73e8}
+.row{display:flex;gap:12px}.row>div{flex:1}
+</style></head><body><header class="site"><div class="wrap"><a href="../index.html"><h1>Smart Daily Tips</h1></a><p style="margin-top:8px"><a href="../index.html">Home</a> &nbsp;|&nbsp; <a href="index.html">All Tools</a></p></div></header><main class="wrap"><div class="tool"><h1 class="title">SIP Calculator - Mutual Fund Returns Estimator</h1>
+<p>See how much your monthly SIP investment can grow over time.</p>
+<label>Monthly Investment (Rs.)</label><input id="m" type="number" value="5000">
+<label>Expected Return (% per year)</label><input id="er" type="number" value="12" step="0.1">
+<label>Time Period (years)</label><input id="ty" type="number" value="10">
+<button onclick="sip()">Calculate</button>
+<div id="o" class="result" style="display:none"></div>
+<script>
+function f2(n){return '₹'+Math.round(n).toLocaleString('en-IN')}
+function sip(){var P=+m.value,i=(+er.value)/12/100,n=(+ty.value)*12;
+var fv=i? P*(Math.pow(1+i,n)-1)/i*(1+i) : P*n;
+var inv=P*n;
+o.style.display='block';
+o.innerHTML='Maturity Value: <b>'+f2(fv)+'</b><br>Invested: '+f2(inv)+
+'<br>Estimated Gains: '+f2(fv-inv);}
+sip();
+</script><p style="margin-top:24px"><a href="index.html">&larr; All calculators</a></p></div></main><footer>&copy; Smart Daily Tips. For information purposes only.</footer></body></html>

@@ -38,7 +38,10 @@ def _head(title, description):
         f'{_ads_head()}<style>{CSS}</style></head><body>'
         f'<header class="site"><div class="wrap">'
         f'<a href="index.html"><h1>{html.escape(config.SITE_TITLE)}</h1></a>'
-        f'<p>{html.escape(config.SITE_TAGLINE)}</p></div></header>'
+        f'<p>{html.escape(config.SITE_TAGLINE)}</p>'
+        f'<p style="margin-top:8px"><a href="index.html">Home</a> &nbsp;|&nbsp; '
+        f'<a href="tools/index.html">Free Tools &amp; Calculators</a></p>'
+        f'</div></header>'
     )
 
 
