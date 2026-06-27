@@ -11,6 +11,7 @@ from datetime import datetime
 import config
 import writer
 import render
+import keywords
 
 for _s in (sys.stdout, sys.stderr):
     try:
@@ -37,7 +38,9 @@ def run():
     used = [a["title"] for a in data["articles"]]
     print(f"[blog] {len(used)} articles so far; writing a new one...")
 
-    art = writer.write_article(used)
+    # demand-driven: target a REAL Google search query (falls back to Gemini's pick)
+    target = keywords.pick_keyword(used) or ""
+    art = writer.write_article(used, target)
     if not art:
         print("[blog] could not generate an article (Gemini issue). Try again later.")
         return

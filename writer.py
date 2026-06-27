@@ -35,14 +35,22 @@ def slugify(title: str) -> str:
     return s[:70] or "post"
 
 
-def write_article(used_titles: list[str]) -> dict | None:
+def write_article(used_titles: list[str], target: str = "") -> dict | None:
     avoid = "; ".join(used_titles[-60:]) or "none yet"
+    if target:
+        topic_line = (
+            f"Write an article that will RANK on Google for this exact search query "
+            f"that real people type: '{target}'. The title should closely match the "
+            f"search query (natural, under 65 chars), and the article must fully and "
+            f"directly answer that search intent.\n")
+    else:
+        topic_line = (
+            f"Pick ONE fresh, high-search-demand article topic (a real thing people "
+            f"Google). Do NOT repeat or resemble these existing posts: {avoid}.\n")
     prompt = (
         f"You are an SEO content writer for a blog about: {config.NICHE}.\n"
-        f"Pick ONE fresh, high-search-demand article topic (a real thing people Google, "
-        f"e.g. 'how to', 'best ... under budget', 'X vs Y', 'tips to ...'). Do NOT repeat "
-        f"or resemble these existing posts: {avoid}.\n"
-        f"Then write a genuinely useful, original article on it.\n"
+        f"{topic_line}"
+        f"Write a genuinely useful, original article.\n"
         f"Return ONLY valid JSON, no markdown:\n"
         f'{{"title": "...", "meta_description": "...", "intro": "...", '
         f'"sections": [{{"heading": "...", "content": "..."}}], "conclusion": "..."}}\n'
