@@ -27,7 +27,7 @@ SITE_URL = os.getenv("SITE_URL", "https://pradeepprajapati9.github.io/blog_bot")
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "prajapatipradeepkumar954@gmail.com").strip()
 # Cross-promotion: link the assets to each other so they feed one audience.
 YOUTUBE_URL = os.getenv("YOUTUBE_URL", "https://www.youtube.com/@Creati_Vity_99").strip()
-TELEGRAM_URL = os.getenv("TELEGRAM_URL", "").strip()   # add your channel invite link
+TELEGRAM_URL = os.getenv("TELEGRAM_URL", "https://t.me/+JWcY4Vns1q03ZmRl").strip()
 
 # ONE multi-niche blog: money/finance, tech, health, govt schemes, everyday how-to.
 NICHE = os.getenv(
