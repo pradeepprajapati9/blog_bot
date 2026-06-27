@@ -11,32 +11,10 @@ import render
 TOOLS_DIR = config.DOCS_DIR / "tools"
 TOOLS_DIR.mkdir(exist_ok=True)
 
-FORM_CSS = """
-.tool label{display:block;margin:14px 0 4px;font-weight:600}
-.tool input,.tool select{width:100%;padding:11px;font-size:16px;border:1px solid #cfd6e0;
-border-radius:8px}
-.tool button{margin-top:18px;width:100%;padding:13px;font-size:17px;font-weight:700;
-background:#1a73e8;color:#fff;border:0;border-radius:8px;cursor:pointer}
-.result{margin-top:20px;padding:16px;background:#eef4ff;border-radius:10px;font-size:17px}
-.result b{font-size:22px;color:#1a73e8}
-.row{display:flex;gap:12px}.row>div{flex:1}
-"""
-
-
 def _head(title, desc):
-    ads = render._ads_head()
-    return (
-        f'<!doctype html><html lang="en"><head><meta charset="utf-8">'
-        f'<meta name="viewport" content="width=device-width,initial-scale=1">'
-        f'<title>{html.escape(title)}</title>'
-        f'<meta name="description" content="{html.escape(desc)}">'
-        f'{ads}<style>{render.CSS}{FORM_CSS}</style></head><body>'
-        f'<header class="site"><div class="wrap">'
-        f'<a href="../index.html"><h1>{html.escape(config.SITE_TITLE)}</h1></a>'
-        f'<p style="margin-top:8px"><a href="../index.html">Home</a> &nbsp;|&nbsp; '
-        f'<a href="index.html">All Tools</a></p></div></header>'
-        f'<main class="wrap"><div class="tool"><h1 class="title">{html.escape(title)}</h1>'
-    )
+    # reuse the blog's external-CSS head, with paths relative to /tools
+    return render._head(title, desc, css_path="../style.css",
+                        home="../index.html", tools="index.html")
 
 
 FOOT = ('<p style="margin-top:24px"><a href="index.html">&larr; All calculators</a></p>'
@@ -44,7 +22,10 @@ FOOT = ('<p style="margin-top:24px"><a href="index.html">&larr; All calculators<
 
 
 def page(slug, title, desc, body):
-    (TOOLS_DIR / f"{slug}.html").write_text(_head(title, desc) + body + FOOT, "utf-8")
+    head = (_head(title, desc) +
+            f'<main class="wrap"><div class="tool">'
+            f'<h1 class="title">{html.escape(title)}</h1>')
+    (TOOLS_DIR / f"{slug}.html").write_text(head + body + FOOT, "utf-8")
 
 
 # ---------------- calculators ----------------
@@ -152,16 +133,16 @@ TOOLS = [
 
 
 def build():
+    render.write_css()                      # ensure the shared theme exists
     for slug, title, desc, body in TOOLS:
         page(slug, title, desc, body)
-    # index
     cards = "".join(
         f'<div class="card"><a href="{s}.html">{html.escape(t)}</a></div>'
         for s, t, d, b in TOOLS)
     idx = (_head("Free Online Tools & Calculators",
                  "Free calculators: EMI, SIP, Age, GST and Percentage - fast and accurate.")
-           .replace('<div class="tool">', '<div>')
-           + cards + '</div></main>' + render.FOOT)
+           + '<main class="wrap"><h1 class="title">Free Tools &amp; Calculators</h1>'
+           + cards + '</main>' + render.FOOT)
     (TOOLS_DIR / "index.html").write_text(idx, "utf-8")
     print(f"Built {len(TOOLS)} tools + index in {TOOLS_DIR}")
 

@@ -34,6 +34,7 @@ def _save(data):
 
 
 def run():
+    render.write_css()      # keep the shared theme (style.css) up to date
     data = _load()
     used = [a["title"] for a in data["articles"]]
     print(f"[blog] {len(used)} articles so far; writing a new one...")
