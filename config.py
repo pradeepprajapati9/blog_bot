@@ -16,7 +16,7 @@ DOCS_DIR.mkdir(exist_ok=True)
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 ADSENSE_CLIENT = os.getenv("ADSENSE_CLIENT", "").strip()
 # Google Search Console verification (the 'content' value from its HTML-tag method).
-GSC_VERIFY = os.getenv("GSC_VERIFY", "").strip()
+GSC_VERIFY = os.getenv("GSC_VERIFY", "H3ZI_r2rt6CNxSW5c4c--3q8e1savcV4D6je3-FaqWc").strip()
 SITE_TITLE = os.getenv("SITE_TITLE", "Smart Daily Tips").strip()
 SITE_TAGLINE = os.getenv("SITE_TAGLINE", "Practical tips for everyday life").strip()
 
