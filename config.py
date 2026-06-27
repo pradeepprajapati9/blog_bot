@@ -19,7 +19,7 @@ SITE_TITLE = os.getenv("SITE_TITLE", "Smart Daily Tips").strip()
 SITE_TAGLINE = os.getenv("SITE_TAGLINE", "Practical tips for everyday life").strip()
 
 # Public base URL (no trailing slash) - for canonical links, sitemap, OG tags.
-SITE_URL = os.getenv("SITE_URL", "https://blog.bazaarmentor.com").rstrip("/")
+SITE_URL = os.getenv("SITE_URL", "https://pradeepprajapati9.github.io/blog_bot").rstrip("/")
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "prajapatipradeepkumar954@gmail.com").strip()
 # Cross-promotion: link the assets to each other so they feed one audience.
 YOUTUBE_URL = os.getenv("YOUTUBE_URL", "https://www.youtube.com/@Creati_Vity_99").strip()
