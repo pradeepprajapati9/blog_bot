@@ -78,6 +78,8 @@ def _head(title, description, canonical=None, css_path="style.css",
         f'<!doctype html><html lang="en"><head><meta charset="utf-8">'
         f'<meta name="viewport" content="width=device-width,initial-scale=1">'
         f'<title>{t}</title><meta name="description" content="{d}">'
+        + (f'<meta name="google-site-verification" content="{config.GSC_VERIFY}">'
+           if config.GSC_VERIFY else "") +
         f'<link rel="canonical" href="{canonical}">'
         f'<link rel="icon" type="image/svg+xml" href="{config.SITE_URL}/favicon.svg">'
         f'<meta property="og:title" content="{t}">'
