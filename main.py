@@ -55,9 +55,10 @@ def run():
         slug = f"{slug}-{len(data['articles'])+1}"
     art["slug"] = slug
 
-    # write the article page
+    # write the article page (with internal links to recent articles)
+    related = list(reversed(data["articles"]))[:5]
     (config.DOCS_DIR / f"{slug}.html").write_text(
-        render.article_page(art, date_str), "utf-8")
+        render.article_page(art, date_str, related), "utf-8")
 
     # record + rebuild homepage (newest first)
     data["articles"].append({

@@ -70,6 +70,15 @@ def _ads_head():
             f'adsbygoogle.js?client={config.ADSENSE_CLIENT}" crossorigin="anonymous"></script>')
 
 
+def _ga():
+    if not config.GA_ID:
+        return ""
+    return (f'<script async src="https://www.googletagmanager.com/gtag/js?id='
+            f'{config.GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];'
+            f'function gtag(){{dataLayer.push(arguments)}}gtag("js",new Date());'
+            f'gtag("config","{config.GA_ID}");</script>')
+
+
 def _head(title, description, canonical=None, css_path="style.css",
           home="index.html", tools="tools/index.html"):
     canonical = canonical or (config.SITE_URL + "/")
@@ -87,7 +96,7 @@ def _head(title, description, canonical=None, css_path="style.css",
         f'<meta property="og:type" content="website">'
         f'<meta property="og:url" content="{canonical}">'
         f'<meta name="twitter:card" content="summary">'
-        f'<link rel="stylesheet" href="{css_path}">{_ads_head()}</head><body>'
+        f'<link rel="stylesheet" href="{css_path}">{_ga()}{_ads_head()}</head><body>'
         f'<header class="site"><div class="wrap">'
         f'<a href="{home}"><h1>{html.escape(config.SITE_TITLE)}</h1></a>'
         f'<p class="tag">{html.escape(config.SITE_TAGLINE)}</p>'
@@ -115,7 +124,7 @@ def _footer():
 FOOT = _footer()
 
 
-def article_page(art: dict, date_str: str) -> str:
+def article_page(art: dict, date_str: str, related: list[dict] | None = None) -> str:
     body = [f'<h1 class="title">{html.escape(art["title"])}</h1>',
             f'<div class="meta">{date_str}</div>',
             f'<p>{html.escape(art.get("intro",""))}</p>']
@@ -129,6 +138,11 @@ def article_page(art: dict, date_str: str) -> str:
         body.append(f'<h2>{html.escape(h)}</h2><p>{html.escape(c)}</p>')
     if art.get("conclusion"):
         body.append(f'<h2>Conclusion</h2><p>{html.escape(art["conclusion"])}</p>')
+    if related:
+        items = "".join(
+            f'<div class="card"><a href="{r["slug"]}.html">{html.escape(r["title"])}</a></div>'
+            for r in related)
+        body.append(f'<h2>Related Articles</h2>{items}')
     body.append('<p style="margin-top:24px"><a href="index.html">&larr; More articles</a></p>')
     canonical = f'{config.SITE_URL}/{art["slug"]}.html'
     schema = {
