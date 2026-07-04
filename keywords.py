@@ -8,11 +8,15 @@ import json
 import requests
 
 # ONE blog, ALL niches. Add a niche = just add a few seeds here (no new repo!).
+# NOTE: seeds are intentionally SAFE. We avoid "loan / earn money online / credit
+# card / instant" style money seeds because Google Autocomplete expands them into
+# scam-flavoured queries ("...without investment instant withdrawal", "...bad
+# credit instant approval") that get the whole site flagged as a deceptive site.
+# A hard safety filter (is_safe / BANNED below) is the real backstop.
 SEEDS = [
-    # money & finance (high AdSense RPM)
-    "how to save money", "how to get personal loan", "how to improve cibil score",
-    "best credit card for", "how to save tax", "best investment for beginners",
-    "how to earn money online", "best savings account",
+    # personal finance — EDUCATIONAL & safe (no loans/earn-quick/credit-card)
+    "how to save money", "how to save tax", "how to make a budget",
+    "how to use upi", "what is mutual fund", "how to pay bills online",
     # tech & gadgets
     "best phone under", "best laptop under", "best earbuds under",
     "best smartwatch under", "how to fix phone", "best phone for",
@@ -26,6 +30,38 @@ SEEDS = [
     "how to", "what is", "best apps for", "how to make", "how to start",
 ]
 UA = {"User-Agent": "Mozilla/5.0"}
+
+# --- SAFETY: phrases that make Google flag a site as deceptive/scam/phishing, or
+# that break AdSense policy. Any keyword OR generated article containing one of
+# these is rejected before it can be published. This is what keeps the whole
+# github.io domain (and every other bot on it) out of the "Dangerous site" list.
+BANNED = [
+    # get-rich / earn-quick scam language
+    "earn money online", "earn money from", "make money online", "make money fast",
+    "money online", "online earning", "earning app", "earning apps", "earn from home",
+    "without investment", "no investment", "zero investment", "instant withdrawal",
+    "instant payout", "instant cash", "quick money", "fast cash", "get rich",
+    "double your money", "guaranteed income", "guaranteed return", "passive income app",
+    "refer and earn", "paise kamao", "paise kaise kamaye",
+    # loan / instant-credit scam language
+    "personal loan", "instant loan", "instant approval", "loan without",
+    "loan app", "payday loan", "loan from", "bad credit", "low credit score",
+    "credit card for", "best credit card", "loan to pay off", "stop calling",
+    # spammy "quick fix" credit-repair language
+    "cibil score in one day", "cibil score in a day", "cibil in one day",
+    "improve cibil score in", "increase cibil score fast",
+    # other high-risk / policy-violating niches
+    "crypto", "bitcoin", "forex", "betting", "gambling", "lottery", "casino",
+    "dating", "adult", "hack", "cheat", "free recharge", "free fire diamond",
+]
+
+
+def is_safe(text: str) -> bool:
+    """True only if `text` contains none of the deceptive/scam trigger phrases.
+    Used both to reject risky search queries and to reject risky generated
+    articles, so nothing that could get the site flagged ever gets published."""
+    t = (text or "").lower()
+    return not any(bad in t for bad in BANNED)
 
 
 def _suggest(query: str):
@@ -49,8 +85,9 @@ def get_keywords(limit: int = 60):
         for k in _suggest(s):
             k = (k or "").strip()
             kl = k.lower()
-            # keep useful, specific, India-relevant queries
-            if k and kl not in seen and 15 <= len(k) <= 70:
+            # keep useful, specific, India-relevant queries — and SKIP anything
+            # that trips the scam/deceptive filter so it can never be published.
+            if k and kl not in seen and 15 <= len(k) <= 70 and is_safe(k):
                 seen.add(kl)
                 pool.append(k)
         if len(pool) >= limit:

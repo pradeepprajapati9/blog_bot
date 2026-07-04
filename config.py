@@ -29,11 +29,16 @@ CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "prajapatipradeepkumar954@gmail.com")
 YOUTUBE_URL = os.getenv("YOUTUBE_URL", "https://www.youtube.com/@Creati_Vity_99").strip()
 TELEGRAM_URL = os.getenv("TELEGRAM_URL", "https://t.me/+JWcY4Vns1q03ZmRl").strip()
 
-# ONE multi-niche blog: money/finance, tech, health, govt schemes, everyday how-to.
+# ONE multi-niche blog: everyday how-to, tech, health, govt schemes, safe money tips.
+# IMPORTANT: no "earn money online / instant withdrawal / loans / instant credit"
+# angles - that kind of content gets the whole site flagged as a deceptive/scam
+# site by Google Safe Browsing (and violates AdSense policy).
 NICHE = os.getenv(
     "NICHE",
-    "practical, accurate how-to guides for Indian readers across money & finance "
-    "(loans, credit, savings, tax), tech & gadgets, health & fitness, government "
-    "schemes & jobs, and everyday-life tips. Educational only - never specific "
-    "investment, medical, or legal advice",
+    "practical, accurate, genuinely useful how-to guides for Indian readers across "
+    "everyday life, tech & gadgets, health & fitness, government schemes & services, "
+    "and basic personal-finance literacy (budgeting, saving, tax basics, using UPI "
+    "and government portals). Educational only - never specific investment, medical, "
+    "or legal advice, and NEVER 'earn money online', 'work from home income', "
+    "'instant withdrawal', loans, instant credit, or any get-rich-quick angle",
 )

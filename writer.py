@@ -4,6 +4,7 @@ import json
 import time
 import requests
 import config
+import keywords  # for the shared scam/deceptive safety filter (is_safe)
 
 MODELS = ["gemini-2.5-flash", "gemini-flash-latest", "gemini-2.5-flash-lite"]
 
@@ -67,6 +68,19 @@ def write_article(used_titles: list[str], target: str = "") -> dict | None:
         raw = re.sub(r",\s*([}\]])", r"\1", raw)   # strip trailing commas
         art = json.loads(raw)
         if art.get("title") and art.get("sections"):
+            # SAFETY GATE: never publish an article whose title/description/body
+            # contains a scam/deceptive trigger phrase - that is what gets the
+            # whole site flagged as a "Dangerous site" by Google Safe Browsing.
+            blob = " ".join([
+                art.get("title", ""), art.get("meta_description", ""),
+                art.get("intro", ""), art.get("conclusion", ""),
+                " ".join(f'{s.get("heading","")} {s.get("content","")}'
+                         for s in art.get("sections", []) if isinstance(s, dict)),
+            ])
+            if not keywords.is_safe(blob):
+                print("[writer] REJECTED: article tripped the scam/deceptive "
+                      "safety filter; not publishing.")
+                return None
             art["slug"] = slugify(art["title"])
             return art
     except Exception as ex:
